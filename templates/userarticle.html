@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="{% static '/css/style.css'%}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poor+Story&display=swap" rel="stylesheet"> 
+</head>
+
+<body>
+    <!--NAVBAR SECTION-->
+  
+    <h1>Authors Blogs</h1>
+    {% if user.is_authenticated %}
+    <p>{{user.first_name}}👥 Signed In</p>
+   
+
+    {% for article in articles %}
+
+    <div class="blog-holder">
+
+        <h6>Title: {{article.title}}||Topic: {{article.title}}||Author: {{article.author}}</h3>
+        <p>Summary:{{article.summary}}<p>
+        <p>Full Article:{{article.content}}<p>
+    </div>
+    {% endfor %}
+   
+    
+    
+    {% else %}
+    <p>👥 User Not Logged In</p>
+    <h1>PLEASE LOGIN TO SEE YOUR SAVED ARTICLES<h1>
+    
+    
+   
+    {% endif %}
+    
+   
+
+
+    
+</body>
+
+</html>

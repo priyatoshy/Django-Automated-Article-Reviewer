@@ -1,0 +1,51 @@
+body{
+   
+    color: aliceblue;
+    font-family: 'Poor Story', cursive;
+    font-size: x-large;
+    background: rgb(82,54,175);
+    background: linear-gradient(90deg, rgba(82,54,175,1) 0%, rgba(104,60,122,1) 48%, rgba(51,53,107,1) 69%); 
+    
+}
+.navtag{
+    margin-left: 25px;
+    margin-left: 50px;
+    text-decoration: solid;
+    color: rgb(217, 211, 223);
+}
+.form-container{
+    margin-left: 25%;
+}
+.input-holder{
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+.inp-field{
+    background: rgb(82,54,175);
+    background: linear-gradient(90deg, rgba(82,54,175,1) 0%, rgba(92,54,113,1) 0%, rgba(104,60,122,1) 2%, rgba(10,11,50,1) 3%); 
+    color: aliceblue;
+    font-size: large;
+    border: 1px snow aliceblue;
+}
+
+.submit-btn{
+    background: rgb(82,54,175);
+    background: linear-gradient(90deg, rgba(82,54,175,1) 0%, rgba(92,54,113,1) 0%, rgba(104,60,122,1) 2%, rgba(10,11,50,1) 3%); 
+    color: aliceblue;
+    height: 50px;
+    width: 100px;
+    
+}
+blog-holder{
+    margin-left: 30%;
+    margin-bottom: 50px;
+    font-size: small;
+    border: 5px solid white;
+
+}
+
+.form-container-login{
+    margin-left:30%;
+    margin-top: 15%;
+
+}

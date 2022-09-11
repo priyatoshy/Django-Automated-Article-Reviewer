@@ -1,0 +1,70 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Patient</title>
+    <link rel="stylesheet" href="{% static '/css/style.css'%}">
+</head>
+<body>
+
+<link rel="stylesheet" href="style.css">
+<h2 class="reading">{{clinic_name}}<h2>
+
+
+
+<div class="form-container-login">
+
+  
+
+    <form action="" method="post">
+
+        <!--
+
+            FORM WILL TAKE THE DATA BACK TO ITSELF
+            THEN WE WILL DECIDE ACTION BASED
+            ON THE HTTP REQUEST
+            1.ACTION FOR GET
+            2.ACTIO  FOR POST
+        -->
+
+        <!--Adding CSRF TOKEN FOR POST REQUEST SECURITY-->
+        {% csrf_token %}
+        
+        <div class="input-holder">
+            <label for="username">User Name: </label>
+            <input required class="inp-field" type="text" name="username" id="username" class="reginp" placeholder="User Name">
+    
+        </div>
+
+        <div class="input-holder">
+
+            <label for="password">Enter a password: </label>
+            <input required class="inp-field" type="password" name="password" id="password" class="reginp" placeholder="PASSWORD">
+       
+        </div>
+        
+        
+    
+        <input type="submit" class="submit-btn" value="Login">
+    
+    </form>
+
+</div>
+
+<div>
+    {% for message in messages %}
+    <script>
+        alert('{{ message }}');
+    </script>
+    
+    {% endfor %}
+    
+</div>
+
+    
+</body>
+</html>

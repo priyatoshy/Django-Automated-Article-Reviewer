@@ -1,0 +1,88 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Registration</title>
+    <link rel="stylesheet" href="{% static '/css/style.css'%}">
+</head>
+<body>
+
+<link rel="stylesheet" href="style.css">
+<h2 class="reading">{{clinic_name}}<h2>
+
+
+
+<div class="form-container">
+
+    <form action="registration" method="post">
+        <!--
+
+            FORM WILL TAKE THE DATA BACK TO ITSELF
+            THEN WE WILL DECIDE ACTION BASED
+            ON THE HTTP REQUEST
+            1.ACTION FOR GET
+            2.ACTIO  FOR POST
+        -->
+
+        <!--Adding CSRF TOKEN FOR POST REQUEST SECURITY-->
+        {% csrf_token %}
+        <div class="input-holder">
+            <label for="first_name">First Name: </label>
+            <input required class="inp-field" type="text" name="first_name" id="first_name" class="reginp"  placeholder="First Name">
+        </div>
+
+        <div class="input-holder">
+
+            <label for="last_name">Last Name: </label>
+            <input required class="inp-field" type="text" name="last_name" id="last_name" class="reginp" placeholder="Last Name">
+      
+
+        </div>
+
+        <div class="input-holder">
+            <label for="user_name">User Name: </label>
+            <input required class="inp-field" type="text" name="user_name" id="user_name" class="reginp" placeholder="User Name">
+
+        </div>
+
+        <div class="input-holder">
+            <label for="email">Email Adrress: </label>
+            <input required class="inp-field" type="text" name="email" id="email" class="reginp" placeholder="Email Address">
+        </div>
+
+        <div class="input-holder">
+            <label for="password1">Enter a password: </label>
+            <input required class="inp-field" type="password" name="password1" id="password1" class="reginp" placeholder="PASSWORD">
+
+        </div>
+        
+        <div class="input-holder">
+            <label for="password2">Confirm Your Password </label>
+            <input required class="inp-field" type="password" name="password2" id="password2" class="reginp" placeholder="CONFIRM PASSWORD">
+
+        </div>
+       
+        <input type="submit" class="submit-btn" value="Register">
+    
+    </form>
+
+</div>
+
+<div>
+
+    {% for message in messages %}
+    <script>
+        alert('{{ message }}');
+    </script>
+    
+    {% endfor %}
+    
+</div>
+
+    
+</body>
+</html>
