@@ -7,11 +7,17 @@ from . import views
 
 
 urlpatterns = [
-    path('',views.login,name='login'),
-    path('registration',views.registration,name='registration'),
-    path('logout',views.logout,name='logout'),
-    path('userarticle',views.userarticle,name='logout')
+    path('login',views.loginUser,name='login'),
+
+    path('logout',views.logoutUser,name='logout'),
+
+    path('register',views.registerUser,name='register'),
+
+    path('show-profile/<str:pk>',views.show_profile,name='show-profile'),
     
+    path('update-profile/<str:pk>',views.update_profile,name='update-profile'),
+
+
 ]
 
 

@@ -1,0 +1,80 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block page %}Home{% endblock page %}Home
+{% block main %}
+    <div class="blogform">
+
+    
+    <form action="" method="POST" enctype="multipart/form-data">
+
+        {% csrf_token %}
+
+        {% for field in form %}
+        
+        <div class="formfield">
+            <label for="">{{field.label}}</label>
+            {{field}}
+        </div>
+        
+
+        {% endfor %}
+
+
+    <input class="btn-special" type="submit" value="Submit">
+
+
+    </form>
+
+    </div>
+
+    <div class="blogform">
+
+        <div class="result">
+            •{{article.topic}}
+        </div>
+     
+    
+        <div class="result">
+            •Article: {{article.content}}
+        </div>
+    
+        <div class="result">
+            •Created_on: {{article.created_on}}
+        </div>
+       
+        <div class="result">
+            •Summary: {{article.summary}}
+        </div>
+   
+        <div class="result">
+            •Subjectivity: {{article.subjectivity}}
+        </div>
+   
+        <div class="result">
+            •Polarity: {{article.polarity}}
+        </div>
+        
+        <div class="result">
+            •Negativity: {{article.negativity}}
+        </div>
+        
+        <div class="result">
+            •Neutrality: {{article.neutrality}}
+        </div>
+       
+        <div class="result">
+            •Positivity {{article.positivity}}
+        </div>
+        
+        <div class="result">
+            •Compound score: {{article.compound_score}}
+        </div>
+        
+    
+    
+
+    <div>
+
+{% endblock main %}
+

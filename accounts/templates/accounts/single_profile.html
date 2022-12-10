@@ -1,0 +1,87 @@
+
+{% extends 'index.html' %}
+{% load static %}
+
+{% block page %}Home{% endblock page %}
+
+{% block main %}
+
+
+
+
+    <div class="blog-content-poster-inner">
+     
+        
+        
+        <p></p><p></p><p></p><p></p><p></p>
+        
+     
+            <p>{{data.full_name}}</p>
+            <p>Email:{{data.email}}</p>
+            <p>Phone Number:{{data.phone_no}}</p>
+            <p>Address:{{data.address}}</p>
+            <p>Active From:{{data.created_on}}</p>
+            <p>Role:{{data.user_role}}</p>
+            <p></p><p></p><p></p><p></p><p></p>
+            {% if request.user == data.user %}
+            <a class="desc-link-internal" href="{% url 'update-profile' data.id %}">
+                📝Edit Profile
+            </a>
+            <p></p><p></p><p></p><p></p><p></p>
+       
+       
+
+       
+    {% endif %}
+       
+    </div>
+    <div class="blog-content-poster-inner">
+        {% for data in articles %}
+
+        <div class="result">
+           
+            <p>⏰{{data.created_on}}|{{data.writer}}</p>
+            
+     
+            
+            
+           
+      
+            <p class="main-content">📑{{data.content}}</p>
+    
+ 
+        <p></p><p></p><p></p><p></p><p></p><p></p>
+        
+
+            <form action="{% url 'my-article' data.id %}" method="GET">
+
+                <input class="btn" type="submit" value="show">
+            </form>
+
+        <p></p><p></p><p></p><p></p><p></p><p></p>
+        
+            <form action="{% url 'alter-article' data.id %}" method="GET">
+                <input class="btn" type="submit" value="update">
+            </form>
+
+        <p></p><p></p><p></p><p></p><p></p><p></p>
+
+           
+        <form action="{% url 'delete-article' data.id %}" method="GET">
+            <input class="btn" type="submit" value="DELETE">
+        </form>
+        </div>
+       
+        
+        
+    
+    
+    {% endfor %}
+        
+    </div>
+
+
+
+    
+    
+{% endblock main %}

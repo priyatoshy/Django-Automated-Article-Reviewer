@@ -1,0 +1,67 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{%static 'css/style.css' %}">
+    
+    <title>
+      
+        {% block page %}
+        {% endblock page %}
+    
+    </title>
+</head>
+<body>
+    <nav class="nav-main">
+        
+
+        
+        
+        
+        <a class="desc-link-nav"   href="{% url 'home' %}">Home</a>
+        {% if request.user.is_authenticated %}
+       
+            
+        
+            
+            <a class="desc-link-nav"   href="{% url 'show-profile' request.user.profile.id %}">@{{request.user.username}}</a>
+            
+            <a class="desc-link-nav"   href="{% url 'logout' %}">Sign Out</a>
+            <a class="desc-link-nav"   href="{% url 'article' %}">Generate</a>
+
+        {% else %}
+            <a class="desc-link-nav"   href="{% url 'login' %}">Sign In</a>
+            <a class="desc-link-nav"   href="{% url 'register' %}">Sign Up</a>
+            <a class="desc-link-nav"   href="{% url 'login' %}">Generate</a>
+   
+        {% endif %}
+    
+                
+    
+    </nav>
+  
+
+
+    {% if messages %}
+    <ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %} {% endif %}
+        <p class="message">{{ message }}</p>
+    </li>
+    {% endfor %}
+    </ul>
+
+{% endif %}
+    
+    {% block main %}
+    
+    
+    {% endblock main %}
+    
+</body>
+</html>
+

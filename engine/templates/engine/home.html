@@ -1,0 +1,83 @@
+
+{% extends 'index.html' %}
+{% load static %}
+
+{% block page %}Home{% endblock page %}Home
+
+{% block main %}
+
+{% if request.user.is_authenticated %}
+    {% if article %}
+    <div class="blogform">
+
+        <div class="result">
+            •{{article.topic}}
+        </div>
+     
+    
+        <div class="result">
+            •Article: {{article.content}}
+        </div>
+    
+        <div class="result">
+            •Created_on: {{article.created_on}}
+        </div>
+       
+        <div class="result">
+            •Summary: {{article.summary}}
+        </div>
+    
+        <div class="result">
+            •Subjectivity: {{article.subjectivity}}
+        </div>
+    
+        <div class="result">
+            •Polarity: {{article.polarity}}
+        </div>
+        
+        <div class="result">
+            •Negativity: {{article.negativity}}
+        </div>
+        
+        <div class="result">
+            •Neutrality: {{article.neutrality}}
+        </div>
+       
+        <div class="result">
+            •Positivity {{article.positivity}}
+        </div>
+        
+        <div class="result">
+            •Compound score: {{article.compound_score}}
+        </div>
+        
+    
+    
+    
+    <div>
+    
+    {% else %}
+            <p></p><p></p><p></p><p></p><p></p><p></p><p></p>
+            <p></p><p></p><p></p><p></p><p></p><p></p><p></p>
+            <p></p><p></p><p></p><p></p><p></p><p></p><p></p>
+            <p></p><p></p><p></p><p></p><p></p><p></p><p></p>
+    <div class="result">
+      Writer Your First Article
+    </div>
+    
+    
+    {% endif %}
+
+{% else %}
+            <p></p><p></p><p></p><p></p><p></p><p></p><p></p>
+            <p></p><p></p><p></p><p></p><p></p><p></p><p></p>
+            <div class="result">
+                Sign Up to Writer Your First Article
+            </div>
+
+{% endif %}
+
+
+<div>
+
+{% endblock main %}

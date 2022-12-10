@@ -1,4 +1,4 @@
-#!/home/priyatosh/backenddjangorepo101/django_automated_article_review/articlereviewer/env/bin/python
+#!/home/sage/django_repository/article_reviewer/Django-Automated-Article-Reviewer/env/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys

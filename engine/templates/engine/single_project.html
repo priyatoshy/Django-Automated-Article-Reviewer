@@ -1,0 +1,33 @@
+
+{% extends 'index.html' %}
+{% load static %}
+
+{% block page %}Home{% endblock page %}Home
+
+{% block main %}
+
+
+
+<p></p><p></p><p></p><p></p>
+<p></p><p></p><p></p><p></p>
+<p></p><p></p><p></p><p></p>
+    <div class="result">
+      
+        <p class="main-content">•Title: {{data.topic}} | {{data.created_on}}</p>
+        <p class="main-content">•📑{{data.content}}</p>
+        <p class="main-content">•Summary: {{data.summary}}</p>
+        <p class="main-content">•Subjectivity: {{data.subjectivity}}</p>
+        <p class="main-content">•Polarity: {{data.polarity}}</p>
+        <p class="main-content">•Negativity: {{data.negativity}}</p>
+        <p class="main-content">•Neutrality: {{data.neutrality}}</p>
+        <p class="main-content">•Positivity {{data.positivity}}</p>
+        <p class="main-content">•Compound Score: {{data.compound_score}}</p>
+    </div>
+
+    
+  
+
+
+    
+    
+{% endblock main %}
