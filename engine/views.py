@@ -1,230 +1,161 @@
-from multiprocessing import context
+# Create your views here.
 from django.shortcuts import render,redirect
-from django.http import HttpResponse
-from django.contrib.auth.models import User,auth
+from django.http import HttpResponse,JsonResponse
+from .models import Profile
+from django.contrib.auth.forms import UserCreationForm
+from .forms import CustomUserCreationForm
 from django.contrib import messages
-from .models import Article
-from django.contrib.auth.decorators import login_required
-from django.views import View
-from .forms import ArticleForm
-from textblob import TextBlob
-from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
-import nltk
-import re
-import heapq
-from summarizer import summarize
 from engine.models import Article
+from .forms import CustomProfileCreationForm
+from django.contrib.auth.decorators import login_required
 
-      
-#home function
-class Home(View):
-    
-    def get(self,request):
-        if request.user.is_authenticated:
-            
-    
-            profile=request.user.profile
-            if profile:#
-                try:
-                    articles=Article.objects.filter(writer=profile)
-                except:
-                    articles=[]
-                if articles:
-                    article=articles.first()
+from django.contrib.auth import login,authenticate,logout
+from django.contrib.auth.models import User
+from .decorators import unauthneticated_user
 
-                    context={"data":profile,"article":article}
+#login
+def loginUser(request):
+    page='login'
+    context={"page":page}
+    if request.user.is_authenticated==False:
+
+        if request.method=="POST":
+            username=request.POST['username']
+            password=request.POST['password']
+            try:
+                User.objects.get(username=username)
+                user=authenticate(request,username=username,password=password)
+
+                if user!=None:
+                #authenticated and session added
+                    login(request,user)
+                    return redirect("/")
                 else:
-                    context={"data":profile,"article":None}
-                
-                return render(request,'engine/home.html',context)
+                    messages.error(request,"😵Username or Password is incorrect")
+            except:
+                messages.error(request,"😵Username doesnt't exist")
+    else:
+        return redirect("/")
+        
+    
+
+            
+    return render(request,'accounts/login_register.html',context)
+
+#logout
+def logoutUser(request):
+    #deletes the session
+    logout(request)
+    messages.info(request,"🙋Successfully Logged Out")
+    return redirect("login")
+
+
+
+
+#show profile
+@login_required(login_url="login")
+def show_profile(request,pk):
+
+    profile=Profile.objects.get(id=pk)
+    if request.user.profile==profile:
+    
+
+        if profile:
+            articles=Article.objects.filter(writer=profile)
+            if articles:
+                context={"data":profile,"articles":articles}
             else:
-                context={}
-                return render(request,'engine/home.html',context)
+                context={"data":profile,"articles":[]}
         else:
             context={}
-            return render(request,'engine/home.html',context)
-
         
 
-    
-class NewArticle(View):
 
-    #@login_required
-    def get(self,request):
-        form=ArticleForm()
-        context={"form":form}
-        try:
-            profile=request.user.profile
-        except:
-            profile=None
-        if profile:
-           
-            articles=Article.objects.filter(writer=profile)
-            print(articles)
-        
+        return render(request,"accounts/single_profile.html",context)
+    else:
+        return redirect("/")
+
+
+#user registration
+
+@unauthneticated_user
+def registerUser(request):
+            page='register'
             
+            form=CustomUserCreationForm()
             
-            if articles:
-                article=articles.first()
-                context={"article":article,"form":form}
-            else:
-                context={"article":[],"form":form}
-            
-            return render(request,'engine/newblog.html',context)
-        else:
-            context={"article":[],"form":form}
-            return render(request,'engine/newblog.html',context)
-  
-    #@login_required
-    def post(self,request):
-        if request.user.is_authneticated:
-                form = ArticleForm(request.POST, request.FILES)
-                if form.is_valid():
-                    article=form.save(commit=False)
-                    topic=request.POST["topic"]
-                    content=request.POST["content"]
-                    summaryblob=TextBlob(content)
-                    summarySentiment=summaryblob.sentiment
-                    polarity=summarySentiment.polarity
-                    subjectivity=summarySentiment.subjectivity
-                    sid_obj= SentimentIntensityAnalyzer()
-                    emotion=sid_obj.polarity_scores(content)
-                    negativity=emotion["neg"]
-                    positivity=emotion["pos"]
-                    neutrality=emotion["neu"]
-                    compound_score=emotion["compound"]
-                    # Input text - to summarize 
-                    text=content
-                    title=topic
-                    summary = summarize(title, text)
-                    summary = ' '.join(summary)
-                    article.summary=summary
-                    article.subjectivity=subjectivity
-                    article.polarity=polarity
-                    article.negativity=negativity
-                    article.neutrality=neutrality
-                    article.positivity=positivity
-                    article.compound_score=compound_score
-                    
-                    try:
-                        profile=request.user.profile
-                        article.writer=profile
-                    except:
-                        profile=None
-                    article.save()
-                    if profile:
-                        articles=Article.objects.filter(writer=profile)
-                        
-                        if articles:
-                            article=articles.first()
-                            context={"article":article,"form":form}
-                        else:
-                            context={"article":[],"form":form}
-                        
-                        return render(request,'engine/newblog.html',context)
-                    else:
-                        context={"article":[],"form":form}
-                        return render(request,'engine/newblog.html',context)
-       
-        
-                
-            
-            
-
-
- 
-#UPDATE SHOW AND DELETE OPERATIONS FOR EACH ARTICLE
-        
-    
-
-class MyArticle(View):
-    
-
-    #show
-    #@login_required
-    def get(self,request,pk):
-        article=Article.objects.get(id=pk)
-        context={"data":article}
-        #if article.writer==request.user:
-        return render(request,"engine/single_project.html",context)
-
-
-class AlterArticle(View):
-
-    def get(self,request,pk):
-
-        article=Article.objects.get(id=pk)
-        form=ArticleForm(instance=article)
-        return render(request,"engine/newblog.html",{'form':form})
-
-    #update
-    def post(self,request,pk):
-                article=Article.objects.get(id=pk)
-                form = ArticleForm(request.POST, request.FILES,instance=article)
-                
-                if form.is_valid():
-
-                    
-                    article=form.save(commit=False)
-                    topic=request.POST["topic"]
-                    content=request.POST["content"]
-                    summaryblob=TextBlob(content)
-                    summarySentiment=summaryblob.sentiment
-                    polarity=summarySentiment.polarity
-                    subjectivity=summarySentiment.subjectivity
-                    sid_obj= SentimentIntensityAnalyzer()
-                    emotion=sid_obj.polarity_scores(content)
-                    negativity=emotion["neg"]
-                    positivity=emotion["pos"]
-                    neutrality=emotion["neu"]
-                    compound_score=emotion["compound"]
-                    # Input text - to summarize 
-                    text=content
-                    title=topic
-                    summary = summarize(title, text)
-                    summary = ' '.join(summary)
-                    article.summary=summary
-                    article.subjectivity=subjectivity
-                    article.polarity=polarity
-                    article.negativity=negativity
-                    article.neutrality=neutrality
-                    article.positivity=positivity
-                    article.compound_score=compound_score
-                    
-                    try:
-                        profile=request.user.profile
-                        article.writer=profile
-                    except:
-                        profile=None
-                    article.save()
-                    return redirect ('/')
-            
-            
-            
-           
-        #delete
-
-
-class DeleteArticle(View):
-    def get(self,request,pk):
-        article=Article.objects.get(id=pk)
-        if request.user==article.writer.user:
-            return render(request,'engine/delete.html',{'obj':article})
-        else:
-            messages.error(request,"Invalid Request")
-            return redirect("/")
-
-    def post(self,request,pk):
-        #=if the method is a post method
             if request.method=="POST":
-                article=Article.objects.get(id=pk)
-                article.delete()
-                return redirect("/")
+                form=CustomUserCreationForm(request.POST,request.FILES)
+                if form.is_valid():
+                    #saving an instance before commiting
+                    user=form.save(commit=False)
+                    user.username=user.username.lower()
+                    hold_object=User.objects.filter(email=user.email).first()
+                    if hold_object:
+                        print(f"\n\n\n{hold_object}\n\n\n")
+                        messages.error(request,"Email Already Taken")
+                        
 
+                    else:
+                        user.save()
+                        messages.success(request,"User Created")
+                        login(request,user)
+                        return redirect(f"update-profile/{user.profile.id}")
+                else:
+                    messages.error(request,"An error has happened")
+                    #the request with error must come to ths same page
+                    #to show error
         
-            #method1
-     
+                    
+            context={"page":page,"form":form}    
+            return render(request,'accounts/login_register.html',context)
 
+
+
+#UPDATE PROFILE----------------------------
+@login_required(login_url="login")
+def update_profile(request,pk):
+    current_profile= request.user.profile
+    profile=Profile.objects.get(id=pk)
+    if current_profile==profile:
+        
+        form=CustomProfileCreationForm(instance=profile)
+        
+
+        if request.method=="POST":
+            form=CustomProfileCreationForm(request.POST,request.FILES,instance=profile)
+            if form.is_valid():
+                #saving an instance before commiting
+                print(f"{request.POST}")
+                form.save()
+            
+                messages.success(request,"User Updated")
+                #return redirect("/")
+            else:
+                messages.error(request,"An error has happened")
+                #the request with error must come to ths same page
+                #to show error
+                return redirect("/")
+   
+            
+        context={"form":form}    
+        return render(request,'accounts/edit_profile.html',context)
+            
+
+
+    else:
+        messages.warning(request,"FORBIDDEN REQUEST")
+        return redirect("/")
+
+
+
+
+
+
+
+
+
+  
 
 
 
